@@ -1,6 +1,5 @@
 import React, { useState} from "react";
 
-
 export default function Filter(props) {
   const [selectedOption, setSelectedOption] = useState("");
   const [inputValue, setInputValue] = useState("");

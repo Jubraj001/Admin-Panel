@@ -6,7 +6,7 @@ export default function Table(props) {
     const {users,getUsers,editUser,deleteUser} = context;
     const [user,setUser]=useState({id:"",eEmail: "", eRoomNumber:"",eRoomType:"",eStartTime:"",eEndTime:""});
     const [delUser,setDelUser]=useState({delStartTime:"",delEndTime:""})
-    const {selectedOption,inputValue}=props;
+    const {selectedOption,inputValue,booking,filterStartTime,filterEndTime}=props;
     useEffect(()=>{
           getUsers();
       },[]);
@@ -56,6 +56,50 @@ export default function Table(props) {
     } else {
         return true; // return all users if no option is selected
     }
+    });
+    const filteredBookedUsers = filteredUsers.filter(user => {
+        let endTime = Date.parse(user.endTime);
+        let timeDiff = endTime-Date.now(); // difference between current time and start time in milliseconds
+        if (booking === 'upcoming' && timeDiff>=0) {
+            return true;
+        } else if (booking === 'past' && timeDiff<0) {
+            return true;
+        } else {
+            return false; // return all users if no option is selected
+        }
+    });
+    const filteredDateUsers = filteredBookedUsers.filter(user => {
+        let startTime = Date.parse(user.startTime);
+        let endTime = Date.parse(user.endTime);
+        let StartTime = Date.parse(filterStartTime);
+        let EndTime = Date.parse(filterEndTime);
+        if(filterStartTime!=="" && filterEndTime!==""){
+            if(StartTime>=startTime && EndTime<=endTime){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else if(filterStartTime==="" && filterEndTime!==""){
+            if(endTime<=EndTime){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else if(filterEndTime==="" && filterStartTime!==""){
+            if(startTime>=StartTime){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else {
+            return true;
+        }
     });
     return (
         <>
@@ -146,7 +190,7 @@ export default function Table(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredUsers.map((user,ind)=>{
+                    {filteredDateUsers.map((user,ind)=>{
                         ind++;
                         return <TableItem key={user._id} user={user} ind={ind} updateUser={updateUser} showAlert={props.showAlert} onDeleteIcon={onDeleteIcon}/>
                     })}
