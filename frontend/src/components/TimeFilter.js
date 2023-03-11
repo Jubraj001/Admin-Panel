@@ -15,7 +15,6 @@ function TimeFilter(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Do something with the startTime and endTime values here, like submitting to a server
     console.log(`Start Time: ${startTime}, End Time: ${endTime}`);
     if(button==="Search"){
         props.setFilterBookingTime(startTime,endTime);

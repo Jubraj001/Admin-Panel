@@ -35,10 +35,7 @@ export default function Home(props) {
         <Filter setFilter={setFilter}/>
       </div>
       </div>
-        {/* <div className="container" style={{margin:0}}>
-            <Link className="btn btn-success mb-3" to="/addUser">Add Booking</Link>
-        </div> */}
-        <Table selectedOption={selectedOption} inputValue={inputValue} showAlert={props.showAlert} booking={booking} filterStartTime={filterStartTime} filterEndTime={filterEndTime}/>
+      <Table selectedOption={selectedOption} inputValue={inputValue} showAlert={props.showAlert} booking={booking} filterStartTime={filterStartTime} filterEndTime={filterEndTime}/>
     </>
   )
 }

@@ -65,7 +65,7 @@ export default function Table(props) {
         } else if (booking === 'past' && timeDiff<0) {
             return true;
         } else {
-            return false; // return all users if no option is selected
+            return false; 
         }
     });
     const filteredDateUsers = filteredBookedUsers.filter(user => {
