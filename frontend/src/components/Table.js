@@ -5,7 +5,7 @@ export default function Table(props) {
     const context = useContext(UserContext);
     const {users,getUsers,editUser,deleteUser} = context;
     const [user,setUser]=useState({id:"",eEmail: "", eRoomNumber:"",eRoomType:"",eStartTime:"",eEndTime:""});
-    const [delUser,setDelUser]=useState({delStartTime:"",delEndTime:""})
+    const [delUser,setDelUser]=useState({id:"",delStartTime:"",delEndTime:""})
     const {selectedOption,inputValue,booking,filterStartTime,filterEndTime}=props;
     useEffect(()=>{
           getUsers();
@@ -41,11 +41,11 @@ export default function Table(props) {
       }
       function onDeleteIcon (currentUser){ //updateUser
         delRef.current.click();
-        setDelUser({delStartTime:currentUser.startTime,delEndTime:currentUser.endTime})
+        setDelUser({id:currentUser._id,delStartTime:currentUser.startTime,delEndTime:currentUser.endTime})
       }
       const onDelClickHandler =(e)=>{ //onClickHandler
+        deleteUser(delUser.id);
         delRefClose.current.click();
-        deleteUser(user._id);
         props.showAlert("Removed booking","danger");
       }
     const filteredUsers = users.filter(user => {
