@@ -18,7 +18,7 @@ const UserState=(props)=>{
         setUsers(json);
     }
     // Adding a user
-    const addUser = async(email,roomNumber,roomType,startTime,endTime)=>{
+    const addUser = async(email,roomNumber,roomType,startTime,endTime,callback)=>{
         const response = await fetch(`${host}/users`, {
             method: 'POST',
             headers: {
@@ -31,7 +31,14 @@ const UserState=(props)=>{
                 startTime,
                 endTime})
         });
+        if(response.status===409){
+            callback(false);
+        }
+        else{
+            callback(true);
+        }
         const json = await response.json();
+        console.log(json);
         setUsers(users.concat(json));
     }
 

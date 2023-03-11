@@ -26,6 +26,7 @@ export default function TableItem(props) {
   const onClickHandler =(e)=>{
     refClose.current.click();
     deleteUser(user._id);
+    props.showAlert("Removed booking","danger");
   }
 
   

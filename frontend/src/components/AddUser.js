@@ -2,7 +2,7 @@ import { useState, useContext } from 'react';
 import userContext from '../context/userContext';
 import { Link, useNavigate } from 'react-router-dom';
 
-export default function Form() {
+export default function Form(props) {
   const [user, setUser] = useState({
     email: '',
     roomNumber: '',
@@ -14,16 +14,37 @@ export default function Form() {
   let navigate = useNavigate();
   const { addUser } = context;
 
-  const onClickHandler = async (e) => {
-    addUser(user.email, user.roomNumber, user.roomType, user.startTime, user.endTime);
+  const callback=(flag)=>{
+    if(!flag){
+      props.showAlert("There is already a booking for this room in the time slot","danger");
+    }
+    else{
+      let startTime = Date.parse(user.startTime);
+      let endTime = Date.parse(user.endTime);
+      let timeDiff = endTime-startTime; // difference between current time and start time in milliseconds
+      let hoursDiff = timeDiff / (1000 * 60 * 60); // difference in hours
+      let price;
+      if (user.roomType==="A") {
+        price=hoursDiff*100;
+      } else if (user.roomType==="B") {
+        price=hoursDiff*80;
+      } else {
+        price=hoursDiff*50;
+      }
+      price=Math.round(price);
+      props.showAlert(`Successfully booked and the price would be ₹ ${price}`,"success");
+      navigate('/');
+    }
     setUser({ email: '', roomNumber: '', roomType: '', startTime: '', endTime: '' });
-    navigate('/');
+  }
+  const onClickHandler = async (e) => {
+    addUser(user.email, user.roomNumber, user.roomType, user.startTime, user.endTime,callback);
   };
   const onChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
   return (
-    <>
+    <div style={{marginTop:"70px"}}>
       <div className="container">
         <div className="text-center mb-4">
           <h3>
@@ -48,10 +69,10 @@ export default function Form() {
             <div className="col">
               <label className="form-label">Room Type:</label>
               <select className="form-select" name="roomType" value={user.roomType} onChange={onChange}>
-                <option value="">Select a room type</option>
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
+                <option value="">Select Room Type</option>
+                <option value="A">A: 100 Rs/hr</option>
+                <option value="B">B: 80 Rs/hr</option>
+                <option value="C">C: 50 Rs/hr</option>
               </select>
             </div>
           </div>
@@ -71,7 +92,7 @@ export default function Form() {
                 </div>
             </div>
         </div>
-    </>
+    </div>
   )
 }
 

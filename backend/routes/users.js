@@ -15,7 +15,58 @@ router.get("/", async (req, res) => {
   });
   
 // create a new user
+// router.post("/", async (req, res) => {
+//     const user = new User({
+//       email: req.body.email,
+//       roomNumber: req.body.roomNumber,
+//       roomType: req.body.roomType,
+//       startTime: req.body.startTime,
+//       endTime: req.body.endTime,
+//     });
+  
+//     try {
+//       const newUser = await user.save();
+//       res.status(201).json(newUser);
+//     } catch (err) {
+//       res.status(400).json({ message: err.message });
+//     }
+//   });
+
+//create new user
 router.post("/", async (req, res) => {
+  let success=false;
+  try {
+    const existingUser = await User.findOne({
+      roomNumber: req.body.roomNumber,
+      $or: [
+        {
+          $and: [
+            { startTime: { $lte: req.body.startTime } },
+            { endTime: { $gt: req.body.startTime } },
+          ],
+        },
+        {
+          $and: [
+            { startTime: { $lt: req.body.endTime } },
+            { endTime: { $gte: req.body.endTime } },
+          ],
+        },
+        {
+          $and: [
+            { startTime: { $gte: req.body.startTime } },
+            { endTime: { $lte: req.body.endTime } },
+          ],
+        },
+      ],
+    });
+
+    if (existingUser) {
+      return res.status(409).json({
+        message:
+          "There is already a booking for this room during the selected time period.",
+      });
+    }
+
     const user = new User({
       email: req.body.email,
       roomNumber: req.body.roomNumber,
@@ -23,14 +74,14 @@ router.post("/", async (req, res) => {
       startTime: req.body.startTime,
       endTime: req.body.endTime,
     });
-  
-    try {
-      const newUser = await user.save();
-      res.status(201).json(newUser);
-    } catch (err) {
-      res.status(400).json({ message: err.message });
-    }
-  });
+
+    const newUser = await user.save();
+    res.status(201).json(newUser);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
   
 // get a user by id
 router.get("/:id", getUser, (req, res) => {

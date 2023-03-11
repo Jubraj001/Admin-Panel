@@ -63,7 +63,7 @@ export default function Filter(props) {
               />
             </div>
             <div className="col-md-3">
-                <button type="submit" className="btn btn-primary mb-2" disabled={selectedOption.length===0 || inputValue.length===0}>
+                <button type="submit" className="btn btn-primary mb-2" disabled={button==="Filter" && (selectedOption.length===0 || inputValue.length===0)}>
                     {button}
                 </button>
             </div>

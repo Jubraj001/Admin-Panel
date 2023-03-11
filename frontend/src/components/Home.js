@@ -2,7 +2,7 @@ import {useState} from 'react'
 import {Link} from "react-router-dom";
 import Filter from './Filter';
 import Table from './Table';
-export default function Home() {
+export default function Home(props) {
   const [selectedOption, setSelectedOption] = useState("");
   const [inputValue, setInputValue] = useState("");
   function setFilter(option,value){
@@ -11,7 +11,7 @@ export default function Home() {
   }
     return (
       <>
-      <div className="container-fluid">
+      <div className="container-fluid" style={{marginTop:"70px"}}>
         <div className="d-flex justify-content-between">
             <Link className="btn btn-success mb-3 my-" to="/addUser">Add Booking</Link>
             <Filter setFilter={setFilter}/>
@@ -20,7 +20,7 @@ export default function Home() {
         {/* <div className="container" style={{margin:0}}>
             <Link className="btn btn-success mb-3" to="/addUser">Add Booking</Link>
         </div> */}
-        <Table selectedOption={selectedOption} inputValue={inputValue}/>
+        <Table selectedOption={selectedOption} inputValue={inputValue} showAlert={props.showAlert}/>
     </>
   )
 }

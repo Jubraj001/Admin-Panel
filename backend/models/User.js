@@ -5,8 +5,8 @@ const userSchema = new mongoose.Schema({
     email: String,
     roomNumber: String,
     roomType: String,
-    startTime: String, //Convert into date
-    endTime: String, //Convert into date
+    startTime: String, 
+    endTime: String, 
   });
   
 // define a user model

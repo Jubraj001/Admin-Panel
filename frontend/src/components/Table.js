@@ -14,6 +14,20 @@ export default function Table(props) {
     const onClickHandler =(e)=>{
         editUser(user.id,user.eEmail,user.eRoomNumber,user.eRoomType,user.eStartTime,user.eEndTime); 
         refClose.current.click();
+        let startTime = Date.parse(user.eStartTime);
+        let endTime = Date.parse(user.eEndTime);
+        let timeDiff = endTime-startTime; // difference between current time and start time in milliseconds
+        let hoursDiff = timeDiff / (1000 * 60 * 60); // difference in hours
+        let price;
+        if (user.eRoomType==="A") {
+        price=hoursDiff*100;
+        } else if (user.eRoomType==="B") {
+        price=hoursDiff*80;
+        } else {
+        price=hoursDiff*50;
+        }
+        price=Math.round(price);
+        props.showAlert(`Edited Successfully! The updated price is ₹ ${price}`,"success");
     }
     const onChange = (e)=>{
         setUser({...user,[e.target.name]:e.target.value});
@@ -57,7 +71,12 @@ export default function Table(props) {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="eRoomType" className="form-label">Room Type</label>
-                    <input type="text" className="form-control" name="eRoomType" id="eRoomType" onChange={onChange} value={user.eRoomType}/>
+                    <select className="form-select" name="eRoomType" value={user.eRoomType} onChange={onChange}>
+                        <option value="">Select Room Type</option>
+                        <option value="A">A: 100 Rs/hr</option>
+                        <option value="B">B: 80 Rs/hr</option>
+                        <option value="C">C: 50 Rs/hr</option>
+                    </select>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="eStartTime" className="form-label">Start Time</label>
@@ -92,7 +111,7 @@ export default function Table(props) {
                 <tbody>
                     {filteredUsers.map((user,ind)=>{
                         ind++;
-                        return <TableItem key={user._id} user={user} ind={ind} updateUser={updateUser}/>
+                        return <TableItem key={user._id} user={user} ind={ind} updateUser={updateUser} showAlert={props.showAlert}/>
                     })}
                 </tbody>
             </table>
