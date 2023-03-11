@@ -19,7 +19,7 @@ router.post("/", async (req, res) => {
   try {
     const existingUser = await User.findOne({
       roomNumber: req.body.roomNumber,
-      $or: [
+      $and: [
         {
           $and: [
             { startTime: { $lte: req.body.startTime } },
