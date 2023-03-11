@@ -13,28 +13,9 @@ router.get("/", async (req, res) => {
       res.status(500).json({ message: err.message });
     }
   });
-  
-// create a new user
-// router.post("/", async (req, res) => {
-//     const user = new User({
-//       email: req.body.email,
-//       roomNumber: req.body.roomNumber,
-//       roomType: req.body.roomType,
-//       startTime: req.body.startTime,
-//       endTime: req.body.endTime,
-//     });
-  
-//     try {
-//       const newUser = await user.save();
-//       res.status(201).json(newUser);
-//     } catch (err) {
-//       res.status(400).json({ message: err.message });
-//     }
-//   });
 
 //create new user
 router.post("/", async (req, res) => {
-  let success=false;
   try {
     const existingUser = await User.findOne({
       roomNumber: req.body.roomNumber,

@@ -3,14 +3,17 @@ import UserContext from'../context/userContext';
 import TableItem from './TableItem';
 export default function Table(props) {
     const context = useContext(UserContext);
-    const {users,getUsers,editUser} = context;
+    const {users,getUsers,editUser,deleteUser} = context;
     const [user,setUser]=useState({id:"",eEmail: "", eRoomNumber:"",eRoomType:"",eStartTime:"",eEndTime:""});
+    const [delUser,setDelUser]=useState({delStartTime:"",delEndTime:""})
     const {selectedOption,inputValue}=props;
     useEffect(()=>{
           getUsers();
       },[]);
     const ref = useRef(null);
     const refClose = useRef(null);
+    const delRef = useRef(null);
+    const delRefClose = useRef(null);
     const onClickHandler =(e)=>{
         editUser(user.id,user.eEmail,user.eRoomNumber,user.eRoomType,user.eStartTime,user.eEndTime); 
         refClose.current.click();
@@ -20,11 +23,11 @@ export default function Table(props) {
         let hoursDiff = timeDiff / (1000 * 60 * 60); // difference in hours
         let price;
         if (user.eRoomType==="A") {
-        price=hoursDiff*100;
+            price=hoursDiff*100;
         } else if (user.eRoomType==="B") {
-        price=hoursDiff*80;
+            price=hoursDiff*80;
         } else {
-        price=hoursDiff*50;
+            price=hoursDiff*50;
         }
         price=Math.round(price);
         props.showAlert(`Edited Successfully! The updated price is ₹ ${price}`,"success");
@@ -35,6 +38,15 @@ export default function Table(props) {
     const updateUser = (currentUser)=>{
         ref.current.click();
         setUser({id:currentUser._id, eEmail: currentUser.email,eRoomNumber: currentUser.roomNumber, eRoomType:currentUser.roomType,eStartTime:currentUser.startTime, eEndTime:currentUser.endTime}); // Will set the edit fields to the current value before editing
+      }
+      function onDeleteIcon (currentUser){ //updateUser
+        delRef.current.click();
+        setDelUser({delStartTime:currentUser.startTime,delEndTime:currentUser.endTime})
+      }
+      const onDelClickHandler =(e)=>{ //onClickHandler
+        delRefClose.current.click();
+        deleteUser(user._id);
+        props.showAlert("Removed booking","danger");
       }
     const filteredUsers = users.filter(user => {
     if (selectedOption === 'roomNumber') {
@@ -47,6 +59,31 @@ export default function Table(props) {
     });
     return (
         <>
+        {/* Delete User Start */}
+            <button ref={delRef} type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    Launch demo modal
+            </button>
+
+            <div className="modal fade" id="deleteModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                    <div className="modal-header">
+                        <h1 className="modal-title fs-5" id="exampleModalLabel"><strong>Remove Booking</strong></h1>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div className="modal-body">
+                    <h5><strong>{(Date.parse(delUser.delStartTime)-Date.now())/(1000 * 60 * 60) > 48 ? "Complete Refund" : (Date.parse(delUser.delStartTime)-Date.now())/(1000 * 60 * 60) >= 24 && (Date.parse(delUser.delStartTime)-Date.now())/(1000 * 60 * 60) <= 48 ? "50% refund" : "No refund"}</strong></h5>
+                    Are you sure you want to remove the booking?
+                    </div>
+                        <div className="modal-footer">
+                        <button type="button" className="btn btn-primary" ref={delRefClose} data-bs-dismiss="modal">Close</button>
+                        <button type="button" className="btn btn-danger" onClick={onDelClickHandler}>Remove Booking</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {/* Delete User End */}
+
         {/* Edit User */}
 
         <button ref={ref} type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -111,7 +148,7 @@ export default function Table(props) {
                 <tbody>
                     {filteredUsers.map((user,ind)=>{
                         ind++;
-                        return <TableItem key={user._id} user={user} ind={ind} updateUser={updateUser} showAlert={props.showAlert}/>
+                        return <TableItem key={user._id} user={user} ind={ind} updateUser={updateUser} showAlert={props.showAlert} onDeleteIcon={onDeleteIcon}/>
                     })}
                 </tbody>
             </table>
