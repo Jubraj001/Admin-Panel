@@ -3,6 +3,9 @@
   padding:0px;
   font-family: 'Poppins', sans-serif;
 }
+body{
+  background-color: #ddddd2;
+}
 .form-control,.form-select{
   border:2px solid black;
 }

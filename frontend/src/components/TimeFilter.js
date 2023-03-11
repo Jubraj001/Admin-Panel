@@ -32,9 +32,6 @@ function TimeFilter(props) {
     <Form onSubmit={handleSubmit}>
       <Row className="align-items-center">
         <Col sm="auto">
-          {/* <Form.Label htmlFor="startTime" srOnly>
-            Start Time
-          </Form.Label> */}
           <Form.Control
             type="datetime-local"
             id="startTime"
@@ -43,9 +40,6 @@ function TimeFilter(props) {
           />
         </Col>
         <Col sm="auto">
-          {/* <Form.Label htmlFor="endTime" srOnly>
-            End Time
-          </Form.Label> */}
           <Form.Control
             type="datetime-local"
             id="endTime"

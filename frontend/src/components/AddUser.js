@@ -87,7 +87,7 @@ export default function Form(props) {
             </div>
           </div>
           <div className="d-flex justify-content-center my-2">
-            <button type="submit" disabled={user.email.length === 0 || user.roomNumber.length === 0 || user.roomType.length === 0 || user.startTime.length === 0 || user.endTime.length === 0} className="btn btn-success" name="submit" onClick={onClickHandler}>Save</button>
+            <button type="submit" disabled={user.email.length === 0 || user.roomNumber.length === 0 || user.roomType.length === 0 || user.startTime.length === 0 || user.endTime.length === 0 || Date.parse(user.startTime)>Date.parse(user.endTime) || (Date.parse(user.startTime)-Date.now())/(1000*60)>=1} className="btn btn-success" name="submit" onClick={onClickHandler}>Save</button>
                     <Link className="btn btn-danger mx-2" to="/">Cancel</Link>
                 </div>
             </div>
