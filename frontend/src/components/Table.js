@@ -5,7 +5,7 @@ export default function Table(props) {
     const context = useContext(UserContext);
     const {users,getUsers,editUser,deleteUser} = context;
     const [user,setUser]=useState({id:"",eEmail: "", eRoomNumber:"",eRoomType:"",eStartTime:"",eEndTime:""});
-    const [delUser,setDelUser]=useState({id:"",delStartTime:"",delEndTime:""})
+    const [delUser,setDelUser]=useState({id:"",roomType:"",delStartTime:"",delEndTime:""})
     const {selectedOption,inputValue,booking,filterStartTime,filterEndTime}=props;
     useEffect(()=>{
           getUsers();
@@ -41,7 +41,7 @@ export default function Table(props) {
       }
       function onDeleteIcon (currentUser){ //updateUser
         delRef.current.click();
-        setDelUser({id:currentUser._id,delStartTime:currentUser.startTime,delEndTime:currentUser.endTime})
+        setDelUser({id:currentUser._id,roomType:currentUser.roomType,delStartTime:currentUser.startTime,delEndTime:currentUser.endTime})
       }
       const onDelClickHandler =(e)=>{ //onClickHandler
         deleteUser(delUser.id);
@@ -116,8 +116,10 @@ export default function Table(props) {
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div className="modal-body">
-                    <h5><strong>{(Date.parse(delUser.delStartTime)-Date.now())/(1000 * 60 * 60) > 48 ? "Complete Refund" : (Date.parse(delUser.delStartTime)-Date.now())/(1000 * 60 * 60) >= 24 && (Date.parse(delUser.delStartTime)-Date.now())/(1000 * 60 * 60) <= 48 ? "50% refund" : "No refund"}</strong></h5>
-                    Are you sure you want to remove the booking?
+                        <div className="text-center">
+                            <h5><strong>{(Date.parse(delUser.delStartTime)-Date.now())/(1000 * 60 * 60) > 48 ? "Complete Refund" : (Date.parse(delUser.delStartTime)-Date.now())/(1000 * 60 * 60) >= 24 && (Date.parse(delUser.delStartTime)-Date.now())/(1000 * 60 * 60) <= 48 ? "50% refund" : "No refund"}</strong></h5>
+                            {`The amount that will be refunded is ₹ ${(delUser.roomType==="A"?((Date.parse(delUser.delEndTime)-Date.parse(delUser.delStartTime))/(1000 * 60 * 60))*100:delUser.roomType==="B"?((Date.parse(delUser.delEndTime)-Date.parse(delUser.delStartTime))/(1000 * 60 * 60))*80 :((Date.parse(delUser.delEndTime)-Date.parse(delUser.delStartTime))/(1000 * 60 * 60))*50)*((Date.parse(delUser.delStartTime)-Date.now())/(1000 * 60 * 60) > 48 ? 1 : (Date.parse(delUser.delStartTime)-Date.now())/(1000 * 60 * 60) >= 24 && (Date.parse(delUser.delStartTime)-Date.now())/(1000 * 60 * 60) <= 48 ? 0.5 : 0)}`}
+                        </div>
                     </div>
                         <div className="modal-footer">
                         <button type="button" className="btn btn-primary" ref={delRefClose} data-bs-dismiss="modal">Close</button>
