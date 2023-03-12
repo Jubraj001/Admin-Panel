@@ -18,4 +18,9 @@ Admin Panel functionalities
 7. There are three types of rooms types A (100 rs/hr), B(80 rs/hr) and C(50 rs/hr) and an alert box is shown with the price whenever the admin adds or edits a booking
 
 
-
+![alt text](https://i.imgur.com/QOzu3AH.png)
+![alt text](https://i.imgur.com/lDXNoLH.png)
+![alt text](https://i.imgur.com/9EJnhin.png)
+![alt text](https://i.imgur.com/8xQDvtR.png)
+![alt text](https://i.imgur.com/sb8CgoV.png)
+![alt text](https://i.imgur.com/9RlqZZM.png)
