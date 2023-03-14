@@ -17,9 +17,9 @@ router.get("/", async (req, res) => {
 //create new user
 router.post("/", async (req, res) => {
   try {
-    const existingUser = await User.findOne({
+    const existingUser = await User.find({
       roomNumber: req.body.roomNumber,
-      $and: [
+      $or: [
         {
           $and: [
             { startTime: { $lte: req.body.startTime } },
@@ -41,7 +41,7 @@ router.post("/", async (req, res) => {
       ],
     });
 
-    if (existingUser) {
+    if (existingUser.length!==0) {
       return res.status(409).json({
         message:
           "There is already a booking for this room during the selected time period.",

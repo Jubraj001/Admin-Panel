@@ -35,11 +35,11 @@ const UserState=(props)=>{
             callback(false);
         }
         else{
+            const json = await response.json();
+            console.log(json);
+            setUsers(users.concat(json));
             callback(true);
         }
-        const json = await response.json();
-        console.log(json);
-        setUsers(users.concat(json));
     }
 
     // Deleting a user
